@@ -1,0 +1,64 @@
+definitions:
+  handlers.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  models.Order:
+    description: Trade order model
+    properties:
+      id:
+        type: integer
+      order_type:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+      symbol:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /orders:
+    get:
+      description: Fetch a list of submitted trade orders
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Order'
+            type: array
+      summary: Get all trade orders
+      tags:
+      - orders
+    post:
+      consumes:
+      - application/json
+      description: Submit a new trade order with symbol, price, quantity, and type
+      parameters:
+      - description: Order Details
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/models.Order'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Order'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Create a new trade order
+      tags:
+      - orders
+swagger: "2.0"
